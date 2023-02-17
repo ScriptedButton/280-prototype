@@ -1,0 +1,18 @@
+[
+  {
+    "issueId": "1",
+    "issueName": "Should ElectionTech security be used for all elections?",
+    "issueDescription": "Multiple election centers are considering using ElectionTech security for their elections. Should ElectionTech security be used for all elections?",
+    "issueOptions": [
+      "Yes", "No"
+    ]
+  },
+  {
+    "issueId": "2",
+    "issueName": "Should ElectionTech receive a 5% fee on each election",
+    "issueDescription": "We are considering implementing a 5% fee on each election. Should we implement this fee?",
+    "issueOptions": [
+      "Yes", "No"
+    ]
+  }
+]
