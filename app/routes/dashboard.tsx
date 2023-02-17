@@ -2,6 +2,7 @@ import {Card, Stack, Title, Text, Select, Button, TextInput} from "@mantine/core
 import type {LoaderFunction} from "@remix-run/node";
 import {authenticator} from "~/services/auth.server";
 import {Form, useLoaderData} from "@remix-run/react";
+import is from "@sindresorhus/is";
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const user: any = await authenticator.isAuthenticated(request, {
@@ -25,6 +26,7 @@ export default function Dashboard() {
 function VotingTerminal () {
     const ballotData = require("~/ballotData.json");
     const loaderData = useLoaderData();
+    const formData = new FormData();
     return (
             <Stack>
                 <Card>
@@ -61,7 +63,9 @@ function IssueCard (props: any) {
             <Text>
                 {props.issue.issueDescription}
             </Text>
-            <Select data={props.issue.issueOptions} withinPortal={true} placeholder={"Select an option"}
+            <input type={"hidden"} name={`issue[${props.issue.issueId}][name]`} value={props.issue.issueName}/>
+            <input type={"hidden"} name={`issue[${props.issue.issueId}][description]`} value={props.issue.issueDescription}/>
+            <Select data={props.issue.issueOptions} withinPortal={true} placeholder={"Select an option"} name={`issue[${props.issue.issueId}][selection]`}
                     onChange={(value) => console.log(value)}/>
 
         </Card>
