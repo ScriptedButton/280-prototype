@@ -55,12 +55,15 @@ function VotingTerminal () {
 function IssueCard (props: any) {
     return (
         <Card>
-            <Stack>
-                <TextInput disabled name={"issueName"} value={props.issue.issueName}/>
-                <TextInput disabled name={"issueDescription"} value={props.issue.issueDescription}/>
-                <Select name={"issueOption"} data={props.issue.issueOptions} withinPortal={true} placeholder={"Select an option"}
-                        onChange={(value) => console.log(value)}/>
-            </Stack>
+            <Title>
+                {props.issue.issueName}
+            </Title>
+            <Text>
+                {props.issue.issueDescription}
+            </Text>
+            <Select data={props.issue.issueOptions} withinPortal={true} placeholder={"Select an option"}
+                    onChange={(value) => console.log(value)}/>
+
         </Card>
     )
 }
