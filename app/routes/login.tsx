@@ -24,7 +24,7 @@ export default function LoginIndex () {
                 <Form method={"post"}>
                     <Stack>
                         <TextInput name="username" label="Username" placeholder="Username" />
-                        <TextInput name="password" label="Password" placeholder="Password" />
+                        <TextInput name="password" label="Password" type={"password"} placeholder="Password" />
                         <Button type={"submit"}>Login</Button>
                     </Stack>
                 </Form>
