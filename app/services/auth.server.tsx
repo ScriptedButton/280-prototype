@@ -3,8 +3,13 @@ import {Authenticator} from "remix-auth";
 import {sessionStorage} from "~/services/session.server";
 
 interface User {
-    username: string;
-    password: string;
+    security: {
+        username: string
+        password: string;
+    },
+    profile: {
+        name: string;
+    }
 }
 
 function login(username: string, password: string) {
@@ -14,7 +19,7 @@ function login(username: string, password: string) {
     // and return the user if it exists
     let users = require("~/users.json");
     return users.users.find(
-        (user: User) => user.username === username && user.password === password
+        (user: User) => user.security.username === username && user.security.password === password
     );
 }
 

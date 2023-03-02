@@ -1,8 +1,13 @@
 {
   "users": [
     {
-      "username": "Bob",
-      "password": "1234"
+      "security": {
+        "username": "Bob",
+        "password": "1234"
+      },
+      "profile": {
+        "name": "Bob"
+      }
     }
   ]
 }

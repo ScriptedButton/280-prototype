@@ -1,6 +1,17 @@
 import type {LoaderFunction, MetaFunction} from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
-import { MantineProvider, createEmotionCache } from '@mantine/core';
+import {Form, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
+import {
+    MantineProvider,
+    createEmotionCache,
+    Container,
+    Stack,
+    Paper,
+    Text,
+    Center,
+    Group,
+    Avatar,
+    Menu, Button
+} from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
 import { theme } from './theme';
 import {authenticator} from "~/services/auth.server";
@@ -20,6 +31,8 @@ export const loader: LoaderFunction = async ({request, params}) => {
 }
 
 export default function App() {
+    const user = useLoaderData();
+
   return (
       <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
         <html lang="en">
@@ -28,8 +41,26 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body>
-        <Outlet />
+        <body style={{height: "100vh"}}>
+        <Stack h={"100vh"}>
+            <Paper bg={"gray"} h={50}>
+                <Group position={"right"} h={50} mr={20}>
+                    <Menu>
+                        <Menu.Target>
+                            <Avatar component={Button}/>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                                {user &&
+                                    <Form action={"/logout"} method={"post"}>
+
+                                    <Menu.Item component={Button} type={"submit"}>Logout</Menu.Item>
+                                </Form> }
+                        </Menu.Dropdown>
+                    </Menu>
+                </Group>
+            </Paper>
+            <Outlet />
+        </Stack>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

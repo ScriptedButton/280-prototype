@@ -1,16 +1,32 @@
 [
   {
     "issueId": "1",
-    "issueName": "Should ElectionTech security be used for all elections?",
-    "issueDescription": "Multiple election centers are considering using ElectionTech security for their elections. Should ElectionTech security be used for all elections?",
+    "issueName": "Do you support amending the state constitution to impose an additional tax of 4% on income over $1 million?",
+    "issueDescription": "The \"Fair Share Amendment\" would put an extra 4% on any Massachusetts resident's personal income over $1 million.",
     "issueOptions": [
       "Yes", "No"
     ]
   },
   {
     "issueId": "2",
-    "issueName": "Should ElectionTech receive a 5% fee on each election",
-    "issueDescription": "We are considering implementing a 5% fee on each election. Should we implement this fee?",
+    "issueName": "Do you support requiring dental insurers to cover dental care for patients with developmental disabilities?",
+    "issueDescription": "This question would change the dental insurance regulation to include coverage for dental care for patients with developmental disabilities.",
+    "issueOptions": [
+      "Yes", "No"
+    ]
+  },
+  {
+    "issueId": "3",
+    "issueName": "Do you support allowing local governments to issue more licenses for alcohol sales?",
+    "issueDescription": "This question would expand accessibility of alcohol licenses and allow local governments to issue more licenses for alcohol sales.",
+    "issueOptions": [
+      "Yes", "No"
+    ]
+  },
+  {
+    "issueId": "4",
+    "issueName": "Do you support granting driver's licenses to immigrants who are undocumented?",
+    "issueDescription": "This question would make immigrants in the country illegally eligible to obtain driver's licenses.",
     "issueOptions": [
       "Yes", "No"
     ]

@@ -1,8 +1,25 @@
-import {Card, Stack, Title, Text, Select, Button, TextInput} from "@mantine/core";
+import {
+    Card,
+    Stack,
+    Title,
+    Text,
+    Select,
+    Button,
+    TextInput,
+    Paper,
+    Box,
+    Center,
+    Overlay,
+    Flex,
+    SimpleGrid,
+    Group,
+    ActionIcon, MediaQuery
+} from "@mantine/core";
 import type {LoaderFunction} from "@remix-run/node";
 import {authenticator} from "~/services/auth.server";
-import {Form, useLoaderData} from "@remix-run/react";
-import is from "@sindresorhus/is";
+import {Form, Link, NavLink, Outlet, useLoaderData} from "@remix-run/react";
+import {MdArrowLeft, MdBallot} from "react-icons/md";
+import {useEffect, useState} from "react";
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const user: any = await authenticator.isAuthenticated(request, {
@@ -14,13 +31,10 @@ export const loader: LoaderFunction = async ({request, params}) => {
 
 export default function Dashboard() {
     return (
-        <Stack m={10}>
-            <Text size="xl" weight={500}>
-                ElectionTech Security
-            </Text>
-            <VotingTerminal/>
+        <Stack m={10} align={"center"}>
+            <VotingMachine/>
         </Stack>
-);
+    );
 }
 
 function VotingTerminal () {
@@ -28,16 +42,16 @@ function VotingTerminal () {
     const loaderData = useLoaderData();
     const formData = new FormData();
     return (
-            <Stack>
-                <Card>
-                    <Title>
-                        Voting Terminal
-                    </Title>
-                    <Text>
-                        Hi {loaderData.username}! You are logged in!
-                    </Text>
-                </Card>
-                <Form method={"post"} action={"/summary"}>
+        <Stack>
+            <Card>
+                <Title>
+                    Voting Terminal
+                </Title>
+                <Text>
+                    Hi {loaderData.profile.name}! You are logged in!
+                </Text>
+            </Card>
+            <Form method={"post"} action={"/summary"}>
                 <Stack>
                     {ballotData.map((issue: any) => {
                         console.log(issue)
@@ -49,8 +63,8 @@ function VotingTerminal () {
                         Submit
                     </Button>
                 </Stack>
-                </Form>
-            </Stack>
+            </Form>
+        </Stack>
     )
 }
 
@@ -69,5 +83,63 @@ function IssueCard (props: any) {
                     onChange={(value) => console.log(value)}/>
 
         </Card>
+    )
+}
+
+function VotingMachine(props: any) {
+    const user = useLoaderData();
+    const [date, setDate] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setDate(new Date()), 1000);
+        return function cleanup() {
+            clearInterval(timer)
+        }
+
+    });
+
+    return (
+        <Center h={"100%"} mt={0}>
+            <MediaQuery query={"(max-width: 1200px)"} styles={{width: "100vw", height: "100vh"}}>
+                <Paper w={"50vw"} h={"78vh"} bg={"white"} p={10}>
+                    <VotingScreen/>
+                    <Group position={"apart"} pt={10}>
+                        <ActionIcon mt={5}>
+                            <NavLink to={"."}>
+                                <MdArrowLeft size={50} color={"black"}/>
+                            </NavLink>
+                        </ActionIcon>
+                        <Box component={Flex} bg={"black"} w={200} h={50} p={2}>
+                            <Stack spacing={0}>
+                                <Text color={"green"}>
+                                    User: {useLoaderData().profile.name}
+                                </Text>
+                                <Text color={"green"}>
+                                    {date.toLocaleTimeString()}
+                                </Text>
+                            </Stack>
+                        </Box>
+                    </Group>
+                </Paper>
+            </MediaQuery>
+        </Center>
+    )
+}
+
+function VotingScreen(props: any) {
+    return (
+        <Box h={"90%"} w={"100%"} bg={"blue"} p={10}>
+            <Outlet/>
+        </Box>
+    )
+}
+
+function VotingScreenButton(props: any) {
+    return (
+        <Box w={50} h={50} bg={"white"}>
+            <NavLink to={"terminal"}>
+                <MdBallot size={50} color={"black"}/>
+            </NavLink>
+        </Box>
     )
 }
