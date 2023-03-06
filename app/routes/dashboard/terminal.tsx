@@ -1,15 +1,30 @@
-import {Stack, Title, Text, Card, Button, Select, ScrollArea} from "@mantine/core";
-import ballotData from "~/ballotData.json";
-import {Form} from "@remix-run/react";
+import {Stack, Button, ScrollArea} from "@mantine/core";
+import {Form, useLoaderData} from "@remix-run/react";
+import {IssueCard} from "~/components";
+import { getActiveBallotIssues} from "~/services/db.server";
+import type { LoaderFunction} from "@remix-run/node";
+import {json} from "@remix-run/node";
+
+export const loader: LoaderFunction = async () => {
+    const ballotIssues = await getActiveBallotIssues()
+
+    console.log(ballotIssues)
+
+    return json({
+        ballotIssues: ballotIssues
+    })
+}
 
 export default function TerminalIndex () {
+    const loaderData = useLoaderData();
+
     return (
             <ScrollArea style={{height: "100%"}}>
                 <Form method={"post"} action={"../summary"}>
                     <Stack>
-                        {ballotData.map((issue: any) => {
+                        {loaderData.ballotIssues.map((issue: any) => {
                             return (
-                                <IssueCard key={issue.issueId} issue={issue}/>
+                                <IssueCard issue={issue} key={issue.id}/>
                             )
                         })}
                         <Button type={"submit"} variant={"filled"} fullWidth color={"dark"} pb={0}>
@@ -18,20 +33,5 @@ export default function TerminalIndex () {
                     </Stack>
                 </Form>
             </ScrollArea>
-    )
-}
-
-function IssueCard (props: any) {
-    return (
-        <Card>
-            <Stack>
-                <Text>
-                    {props.issue.issueName}
-                </Text>
-                <input type={"hidden"} name={`issue[${props.issue.issueId}][name]`} value={props.issue.issueName}/>
-                <Select withinPortal={true} data={props.issue.issueOptions} placeholder={"Select an option"} name={`issue[${props.issue.issueId}][selection]`}
-                        onChange={(value) => console.log(value)}/>
-            </Stack>
-        </Card>
     )
 }

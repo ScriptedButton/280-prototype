@@ -13,11 +13,13 @@
     "@mantine/core": "^5.10.4",
     "@mantine/hooks": "^5.10.4",
     "@mantine/remix": "^5.10.4",
+    "@prisma/client": "^4.11.0",
     "@remix-run/node": "^1.7.2",
     "@remix-run/react": "^1.7.2",
     "@remix-run/serve": "^1.7.2",
     "file-saver": "^2.0.5",
     "isbot": "^3.6.5",
+    "oci-objectstorage": "^2.53.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
@@ -30,6 +32,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "eslint": "^8.27.0",
+    "prisma": "^4.11.0",
     "typescript": "^4.8.4"
   },
   "engines": {

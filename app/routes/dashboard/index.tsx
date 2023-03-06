@@ -1,24 +1,15 @@
 import {
-    Card,
     Stack,
-    Title,
-    Text,
-    Select,
-    Button,
-    TextInput,
-    Paper,
     Box,
-    Center,
-    Overlay,
-    Flex,
-    SimpleGrid
+    Group
 } from "@mantine/core";
 import type {LoaderFunction} from "@remix-run/node";
 import {authenticator} from "~/services/auth.server";
-import {Form, NavLink, Outlet, useLoaderData} from "@remix-run/react";
-import {MdBallot} from "react-icons/md";
+import {useLoaderData} from "@remix-run/react";
+import {MdBallot, MdSettings} from "react-icons/md";
+import {TerminalButton} from "~/components";
 
-export const loader: LoaderFunction = async ({request, params}) => {
+export const loader: LoaderFunction = async ({request}) => {
     const user: any = await authenticator.isAuthenticated(request, {
         failureRedirect: "/login",
     });
@@ -33,25 +24,15 @@ export default function Dashboard() {
         </Stack>
     );
 }
-function VotingScreen(props: any) {
+function VotingScreen() {
+    const user = useLoaderData();
+
     return (
         <Box h={"100%"} w={"100%"} bg={"blue"} p={10}>
-            <SimpleGrid cols={3}>
-                <VotingScreenButton/>
-            </SimpleGrid>
-        </Box>
-    )
-}
-
-function VotingScreenButton(props: any) {
-    return (
-        <Box w={60} h={60} bg={"white"} sx={{"&:hover": {backgroundColor: "gray"}}}>
-            <NavLink to={"terminal"}>
-                <MdBallot size={60} color={"black"}/>
-            </NavLink>
-            <Text align={"center"} color={"white"}>
-                Vote
-            </Text>
+                <Group spacing={50}>
+                    <TerminalButton to={"terminal"} icon={MdBallot}/>
+                    {user.security.role == "Election Official" && <TerminalButton to={"setup"} icon={MdSettings} text={"Setup"}/>}
+                </Group>
         </Box>
     )
 }

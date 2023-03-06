@@ -6,9 +6,12 @@ interface User {
     security: {
         username: string
         password: string;
+        role: string;
     },
     profile: {
         name: string;
+        image: string;
+        affiliation: string;
     }
 }
 

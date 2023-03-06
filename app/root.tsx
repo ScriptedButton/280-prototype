@@ -33,7 +33,8 @@ export const loader: LoaderFunction = async ({request, params}) => {
 export default function App() {
     const user = useLoaderData();
 
-  return (
+    // @ts-ignore
+    return (
       <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
         <html lang="en">
         <head>
@@ -52,7 +53,6 @@ export default function App() {
                         <Menu.Dropdown>
                                 {user &&
                                     <Form action={"/logout"} method={"post"}>
-
                                     <Menu.Item component={Button} type={"submit"}>Logout</Menu.Item>
                                 </Form> }
                         </Menu.Dropdown>

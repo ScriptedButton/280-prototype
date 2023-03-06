@@ -13,11 +13,11 @@ import {
     Flex,
     SimpleGrid,
     Group,
-    ActionIcon, MediaQuery
+    ActionIcon, MediaQuery, ScrollArea, LoadingOverlay
 } from "@mantine/core";
 import type {LoaderFunction} from "@remix-run/node";
 import {authenticator} from "~/services/auth.server";
-import {Form, Link, NavLink, Outlet, useLoaderData} from "@remix-run/react";
+import {Form, Link, NavLink, Outlet, useLoaderData, useTransition} from "@remix-run/react";
 import {MdArrowLeft, MdBallot} from "react-icons/md";
 import {useEffect, useState} from "react";
 
@@ -87,7 +87,6 @@ function IssueCard (props: any) {
 }
 
 function VotingMachine(props: any) {
-    const user = useLoaderData();
     const [date, setDate] = useState(new Date());
 
     useEffect(() => {
@@ -127,17 +126,24 @@ function VotingMachine(props: any) {
 }
 
 function VotingScreen(props: any) {
+    const transition = useTransition();
     return (
-        <Box h={"90%"} w={"100%"} bg={"blue"} p={10}>
-            <Outlet/>
-        </Box>
+        <>
+
+            <Box h={"90%"} w={"100%"} bg={"blue"} p={10}>
+                <ScrollArea style={{height: "100%"}}>
+                    {transition.state === ("submitting" || "loading") && <LoadingOverlay visible={transition.state === ("submitting" || "loading")} overlayBlur={2}/>}
+                    <Outlet/>
+                </ScrollArea>
+            </Box>
+        </>
     )
 }
 
 function VotingScreenButton(props: any) {
     return (
         <Box w={50} h={50} bg={"white"}>
-            <NavLink to={"terminal"}>
+            <NavLink to={"terminal"} prefetch={"intent"}>
                 <MdBallot size={50} color={"black"}/>
             </NavLink>
         </Box>

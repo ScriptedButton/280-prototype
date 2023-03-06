@@ -3,10 +3,25 @@
     {
       "security": {
         "username": "Bob",
-        "password": "1234"
+        "password": "1234",
+        "role": "Voter"
       },
       "profile": {
-        "name": "Bob"
+        "name": "Bob",
+        "image": "https://t3.ftcdn.net/jpg/00/48/21/44/360_F_48214407_qaZW7HYZ61w7eE272KzyVhNlw7KKOd64.jpg",
+        "affiliation": "REP"
+      }
+    },
+    {
+      "security": {
+        "username": "Joe",
+        "password": "1234",
+        "role": "Election Official"
+      },
+      "profile": {
+        "name": "Joe",
+        "image": "https://t3.ftcdn.net/jpg/00/48/21/44/360_F_48214407_qaZW7HYZ61w7eE272KzyVhNlw7KKOd64.jpg",
+        "affiliation": "DEM"
       }
     }
   ]
