@@ -1,18 +1,18 @@
 import {FormStrategy} from "remix-auth-form";
 import {Authenticator} from "remix-auth";
 import {sessionStorage} from "~/services/session.server";
+import {validateLogin} from "~/services/db.server";
 
 interface User {
-    security: {
-        username: string
-        password: string;
-        role: string;
-    },
-    profile: {
-        name: string;
-        image: string;
-        affiliation: string;
-    }
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    name: string;
+    username: string;
+    password: string;
+    votes: any[];
+    role: any;
+    roleId: string;
 }
 
 function login(username: string, password: string) {
@@ -22,7 +22,7 @@ function login(username: string, password: string) {
     // and return the user if it exists
     let users = require("~/users.json");
     return users.users.find(
-        (user: User) => user.security.username === username && user.security.password === password
+        (user: User) => user.username === username && user.password === password
     );
 }
 
@@ -31,11 +31,12 @@ function login(username: string, password: string) {
 export let authenticator = new Authenticator<User>(sessionStorage);
 
 // Tell the Authenticator to use the form strategy
+// @ts-ignore
 authenticator.use(
     new FormStrategy(async ({ form }) => {
         let username = form.get("username") as string;
         let password = form.get("password") as string;
-        let user = await login(username, password);
+        let user = await validateLogin(username, password);
         // the type of this user must match the type you pass to the Authenticator
         // the strategy will automatically inherit the type if you instantiate
         // directly inside the `use` method

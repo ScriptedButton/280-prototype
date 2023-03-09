@@ -5,13 +5,10 @@ import {
     Text,
     Select,
     Button,
-    TextInput,
     Paper,
     Box,
     Center,
-    Overlay,
     Flex,
-    SimpleGrid,
     Group,
     ActionIcon, MediaQuery, ScrollArea, LoadingOverlay
 } from "@mantine/core";
@@ -48,13 +45,13 @@ function VotingTerminal () {
                     Voting Terminal
                 </Title>
                 <Text>
-                    Hi {loaderData.profile.name}! You are logged in!
+                    Hi {loaderData.name}! You are logged in!
                 </Text>
             </Card>
             <Form method={"post"} action={"/summary"}>
                 <Stack>
                     {ballotData.map((issue: any) => {
-                        console.log(issue)
+
                         return (
                             <IssueCard key={issue.issueId} issue={issue}/>
                         )
@@ -79,9 +76,7 @@ function IssueCard (props: any) {
             </Text>
             <input type={"hidden"} name={`issue[${props.issue.issueId}][name]`} value={props.issue.issueName}/>
             <input type={"hidden"} name={`issue[${props.issue.issueId}][description]`} value={props.issue.issueDescription}/>
-            <Select data={props.issue.issueOptions} withinPortal={true} placeholder={"Select an option"} name={`issue[${props.issue.issueId}][selection]`}
-                    onChange={(value) => console.log(value)}/>
-
+            <Select data={props.issue.issueOptions} withinPortal={true} placeholder={"Select an option"} name={`issue[${props.issue.issueId}][selection]`}/>
         </Card>
     )
 }
@@ -111,7 +106,7 @@ function VotingMachine(props: any) {
                         <Box component={Flex} bg={"black"} w={200} h={50} p={2}>
                             <Stack spacing={0}>
                                 <Text color={"green"}>
-                                    User: {useLoaderData().profile.name}
+                                    User: {useLoaderData().name}
                                 </Text>
                                 <Text color={"green"}>
                                     {date.toLocaleTimeString()}

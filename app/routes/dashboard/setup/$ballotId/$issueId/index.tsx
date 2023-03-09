@@ -9,7 +9,13 @@ async function addIssue(data: any) {
         data: {
             name: data.name,
             description: data.description,
-            options: data.options,
+            options: {
+                create: data.options.map((option: string) => {
+                    return {
+                        name: option,
+                    }
+                })
+            },
             ballotId: data.ballotId
         }
     });
@@ -25,14 +31,20 @@ async function updateIssue(data: any) {
         data: {
             name: data.name,
             description: data.description,
-            options: data.options,
+            options: {
+                create: data.options.map((option: string) => {
+                    return {
+                        name: option,
+                    }
+                })
+            }
         }
     })
 }
 
 async function deleteIssue(data: any) {
     const prisma = new PrismaClient()
-    console.log(data.id)
+
     return await prisma.issue.delete({
         where: {
             id: data.id
@@ -47,7 +59,7 @@ export const action: ActionFunction = async ({request, params}) => {
 
     switch(type) {
         case "save":
-            console.log("save");
+
             await updateIssue({
                 id: formData.get("issueId") as string,
                 name: formData.get("issueName") as string,
@@ -65,7 +77,6 @@ export const action: ActionFunction = async ({request, params}) => {
             await addIssue({
                 name: formData.get("issueName") as string,
                 description: formData.get("issueDescription") as string,
-                options: (formData.get("options") as string)?.split(","),
                 ballotId: params.ballotId
             })
             break;

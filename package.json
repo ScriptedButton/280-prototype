@@ -17,6 +17,7 @@
     "@remix-run/node": "^1.7.2",
     "@remix-run/react": "^1.7.2",
     "@remix-run/serve": "^1.7.2",
+    "bcrypt": "^5.1.0",
     "file-saver": "^2.0.5",
     "isbot": "^3.6.5",
     "oci-objectstorage": "^2.53.1",

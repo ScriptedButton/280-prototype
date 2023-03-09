@@ -15,30 +15,13 @@ import {
     TextInput
 } from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
-import {deleteBallot} from "~/services/db.server";
+import {deleteBallot, getBallot, getBallotIssues} from "~/services/db.server";
 
 export const loader: LoaderFunction = async({params}) => {
     const prisma = new PrismaClient()
 
-    async function findIssues () {
-        return await prisma.issue.findMany(
-            {
-                where: {
-                    ballotId: params.ballotId
-                }
-            }
-        )
-    }
 
-    async function getBallot() {
-        return await prisma.ballot.findUnique({
-            where: {
-                id: params.ballotId
-            }
-        })
-    }
-
-    const [issues, ballot] = await Promise.all([findIssues(), getBallot()]);
+    const [ballot, issues] = await Promise.all([getBallot(params.ballotId as string), getBallotIssues(params.ballotId as string)]);
 
 
     return json({issues: issues, ballot: ballot});
@@ -77,12 +60,17 @@ export const action: ActionFunction = async ({request, params}) => {
                 data: {
                     name: issueName,
                     description: issueDescription,
-                    options: issueOptions,
+                    options: {
+                        create: issueOptions.map((option: string) => {
+                            return {
+                                name: option,
+                            }
+                        })
+                    },
                     ballotId: ballotId
                 }
             });
 
-            console.log("adding me pls")
             break;
         case "delete":
             await deleteBallot(params.ballotId as string);
@@ -96,7 +84,6 @@ export const action: ActionFunction = async ({request, params}) => {
 export default function BallotIndex () {
     const issueData = useLoaderData();
 
-    console.log(issueData)
 
     return (
         <Stack>
@@ -166,6 +153,14 @@ function IssueModal () {
 
 
 function BallotSetupItem (props: any) {
+    const options = props.issue.options.map((option: any) => {
+        return {
+            label: option.name,
+            value: option.id
+        }
+    })
+
+
     return (
         <Accordion.Item value={props.issue.id}>
             <Accordion.Control>
@@ -180,7 +175,7 @@ function BallotSetupItem (props: any) {
                         <Badge>Description</Badge>
                         <Textarea name={"issueDescription"} defaultValue={props.issue.description}/>
                         <Badge>Options</Badge>
-                        <MultiSelect name={"options"} data={props.issue.options} placeholder={"Select options"} defaultValue={props.issue.options} creatable={true} searchable={true}
+                        <MultiSelect name={"options"} data={options} placeholder={"Select options"} defaultValue={options.map(((option: { value: any; }) => option.value))} creatable={true} searchable={true}
                                      getCreateLabel={(query) => `+ Create ${query}`}
                                      onCreate={(query) => {
                                          return {value: query, label: query};

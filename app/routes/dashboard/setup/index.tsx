@@ -68,11 +68,9 @@ export const action: ActionFunction = async ({request, params}) => {
                 issueDescription: formData.get("issueDescription") as string,
                 issueOptions: (formData.get("options") as string).split(",")
             });
-            console.log("save");
             break;
         case "delete":
             await deleteIssue(formData.get("issueId") as string);
-            console.log("delete");
             break;
         case "add":
             await addIssue({

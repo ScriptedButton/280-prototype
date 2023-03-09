@@ -1,4 +1,4 @@
-import {Card, Text, Image, Stack, Title, Group, Select, Box} from "@mantine/core";
+import {Card, Text, Image, Stack, Title, Group, Select, Box, Flex} from "@mantine/core";
 import {NavLink} from "@remix-run/react";
 import {MdBallot} from "react-icons/md";
 
@@ -17,15 +17,22 @@ export function SmartCard (props: any) {
 }
 
 export function IssueCard (props: any) {
+    const options = props.issue.options.map((option: any) => {
+        return {
+            label: option.name,
+            value: option.id
+        }
+    })
+
     return (
         <Card bg={"dark"}>
             <Stack>
                 <Text>
                     {props.issue.name}
                 </Text>
-                <input type={"hidden"} name={`issue[${props.issue.id}][name]`} value={props.issue.name}/>
-                <Select withinPortal={true} data={props.issue.options} placeholder={"Select an option"} name={`issue[${props.issue.id}][selection]`}
-                        onChange={(value) => console.log(value)}/>
+                <input type={"hidden"} name={`issue[${props.issue.id}][id]`} value={props.issue.id}/>
+                <input type={"hidden"} name={`issue[${props.issue.id}][ballotId]`} value={props.issue.ballotId}/>
+                <Select withinPortal={true} data={options} placeholder={"Select an option"} name={`issue[${props.issue.id}][selection]`}/>
             </Stack>
         </Card>
     )
@@ -33,7 +40,7 @@ export function IssueCard (props: any) {
 
 export function TerminalButton (props: any) {
     return (
-        <Box w={60} h={60} bg={props.bgColor || "white"} sx={{"&:hover": {backgroundColor: props.bgHoverColor || "gray"}}}>
+        <Box component={Flex} direction={"column"} align={"center"} w={60} h={60} bg={props.bgColor || "white"} sx={{"&:hover": {backgroundColor: props.bgHoverColor || "gray"}}}>
             <NavLink to={props.to} prefetch={"intent"}>
                 <props.icon size={60} color={props.iconColor || "black"}/>
             </NavLink>

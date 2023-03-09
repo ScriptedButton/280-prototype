@@ -1,5 +1,4 @@
 import {PrismaClient} from '@prisma/client'
-import {json} from "@remix-run/node";
 
 const prisma = new PrismaClient()
 
@@ -21,8 +20,6 @@ export async function addIssue(data: any) {
 }
 
 export async function setBallotStatus(ballotId: string, state: boolean) {
-    const prisma = new PrismaClient()
-
     const ballotData = await prisma.ballot.update({
         where: {
             id: ballotId
@@ -32,21 +29,17 @@ export async function setBallotStatus(ballotId: string, state: boolean) {
         }
     })
 
-    console.log(ballotData)
 
     return ballotData;
 }
 
 export async function getBallots() {
-    const prisma = new PrismaClient()
-
     const ballotData = await prisma.ballot.findMany()
 
     return ballotData;
 }
 
 export async function getBallot(ballotId: string) {
-    const prisma = new PrismaClient()
 
     const ballotData = await prisma.ballot.findFirst(
         {
@@ -60,7 +53,6 @@ export async function getBallot(ballotId: string) {
 }
 
 export async function getActiveBallot() {
-    const prisma = new PrismaClient()
 
     return await prisma.ballot.findFirst(
         {
@@ -72,15 +64,19 @@ export async function getActiveBallot() {
 }
 
 export async function getBallotIssues(ballotId: string) {
-    const prisma = new PrismaClient()
-
     const ballotData = await prisma.issue.findMany(
         {
             where: {
                 Ballot: {
                     id: ballotId,
-                    active: true
                 },
+            },
+            include: {
+                options: {
+                    include: {
+                        votes: true
+                    }
+                }
             }
         }
     )
@@ -89,7 +85,6 @@ export async function getBallotIssues(ballotId: string) {
 }
 
 export async function addBallot(data: any) {
-    const prisma = new PrismaClient()
 
     const ballotData = await prisma.ballot.create({
         data: {
@@ -101,7 +96,6 @@ export async function addBallot(data: any) {
 }
 
 export async function deleteBallot(ballotId: string) {
-    const prisma = new PrismaClient()
 
     const ballotData = await prisma.ballot.delete({
         where: {
@@ -113,17 +107,91 @@ export async function deleteBallot(ballotId: string) {
 }
 
 export async function getActiveBallotIssues() {
-    const prisma = new PrismaClient()
-
     const ballotData = await prisma.issue.findMany(
         {
             where: {
                 Ballot: {
                     active: true
                 },
+            },
+            include: {
+                options: {
+                    include: {
+                        votes: true
+                    }
+                }
             }
         }
     )
 
     return ballotData;
+}
+
+export async function validateLogin(username: string, password: string) {
+    const userData = await prisma.user.findFirst({
+        where: {
+            username: username,
+            password: password
+        }
+    })
+
+    return userData;
+}
+
+export async function addVote(data: any) {
+
+    const voteData = await prisma.vote.create({
+        data: {
+            ballotId: data.ballotId,
+            issueId: data.issueId,
+            optionId: data.optionId,
+            userId: data.userId
+        }
+    })
+
+    await prisma.issue.update({
+        where: {
+            id: data.issueId
+        },
+        data: {
+            votes: {
+                connect: {
+                    id: voteData.id
+                }
+            }
+        }
+    })
+
+    return voteData;
+}
+
+export async function hasVoted(userId: string, ballotId: string) {
+    return await prisma.vote.findFirst({
+        where: {
+            userId: userId,
+            ballotId: ballotId
+        }
+    });
+}
+
+export async function createOption(data: any) {
+    return await prisma.option.create({
+        data: {
+            name: data.name,
+            issueId: data.issueId
+        },
+    })
+}
+
+export async function getUserVoteSummary(userId: string, ballotId: string) {
+    return await prisma.vote.findMany({
+        where: {
+            userId: userId,
+            ballotId: ballotId
+        },
+        include: {
+            option: true,
+            issue: true
+        }
+    })
 }
