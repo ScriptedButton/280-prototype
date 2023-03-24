@@ -18,9 +18,6 @@ import {useDisclosure} from "@mantine/hooks";
 import {deleteBallot, getBallot, getBallotIssues} from "~/services/db.server";
 
 export const loader: LoaderFunction = async({params}) => {
-    const prisma = new PrismaClient()
-
-
     const [ballot, issues] = await Promise.all([getBallot(params.ballotId as string), getBallotIssues(params.ballotId as string)]);
 
 

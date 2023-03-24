@@ -6,7 +6,7 @@ import {
 import type {LoaderFunction} from "@remix-run/node";
 import {authenticator} from "~/services/auth.server";
 import {useLoaderData} from "@remix-run/react";
-import {MdBallot, MdPoll, MdSettings} from "react-icons/md";
+import {MdBallot, MdHistory, MdPerson, MdPoll, MdSettings} from "react-icons/md";
 import {TerminalButton} from "~/components";
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -34,6 +34,8 @@ function VotingScreen() {
                     {user.roleId == "64057d7f4f179eb9ab55f27e" && (<>
                             <TerminalButton to={"setup"} icon={MdSettings} text={"Setup"}/>
                             <TerminalButton to={"results"} icon={MdPoll} text={"Results"}/>
+                            <TerminalButton to={"logs"} icon={MdHistory} text={"Logs"}/>
+                            <TerminalButton to={"users"} icon={MdPerson} text={"Users"}/>
                     </>
                     )}
                 </Group>

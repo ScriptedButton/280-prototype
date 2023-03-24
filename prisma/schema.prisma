@@ -15,7 +15,7 @@ model Option {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
-  issue     Issue    @relation(fields: [issueId], references: [id])
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
   issueId   String   @db.ObjectId
   votes     Vote[]
 }
@@ -24,7 +24,7 @@ model Issue {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  Ballot      Ballot?  @relation(fields: [ballotId], references: [id])
+  Ballot      Ballot?  @relation(fields: [ballotId], references: [id], onDelete: Cascade)
   ballotId    String?  @db.ObjectId
   options     Option[]
   votes       Vote[]
@@ -44,13 +44,13 @@ model Vote {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  ballot    Ballot   @relation(fields: [ballotId], references: [id])
+  ballot    Ballot   @relation(fields: [ballotId], references: [id], onDelete: Cascade)
   ballotId  String   @db.ObjectId
-  issue     Issue    @relation(fields: [issueId], references: [id])
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
   issueId   String   @db.ObjectId
-  option    Option   @relation(fields: [optionId], references: [id])
+  option    Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
   optionId  String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @db.ObjectId
 }
 

@@ -97,13 +97,11 @@ export async function addBallot(data: any) {
 
 export async function deleteBallot(ballotId: string) {
 
-    const ballotData = await prisma.ballot.delete({
+    return await prisma.ballot.delete({
         where: {
             id: ballotId
         }
-    })
-
-    return ballotData;
+    });
 }
 
 export async function getActiveBallotIssues() {
@@ -192,6 +190,31 @@ export async function getUserVoteSummary(userId: string, ballotId: string) {
         include: {
             option: true,
             issue: true
+        }
+    })
+}
+
+export async function getLogData() {
+    // basically, logs are just every vote, issue, option, ballot created and the user who created it
+    return await prisma.vote.findMany({
+            include: {
+                option: true,
+                issue: true,
+                ballot: true,
+                user: true
+            }
+    })
+}
+
+export async function getVoters() {
+    return await prisma.user.findMany({
+        where: {
+            role: {
+                name: 'Voter'
+            },
+        },
+        include: {
+            votes: true
         }
     })
 }
