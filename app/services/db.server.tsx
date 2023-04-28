@@ -218,3 +218,15 @@ export async function getVoters() {
         }
     })
 }
+
+export async function removeAllVotes() {
+    return await prisma.vote.deleteMany({});
+}
+
+export async function removeUserVotes(userId: string) {
+    return await prisma.vote.deleteMany({
+        where: {
+            userId: userId
+        }
+    });
+}
